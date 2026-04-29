@@ -10,7 +10,7 @@ export const signup = async (req, res) => {
 
   try {
     if (!fullName || !email || !password || !bio) {
-      return res.json({ succss: false, message: 'Missing Details' })
+      return res.json({ success: false, message: 'Missing Details' })
     }
     const user = await User.findOne({ email })
 
@@ -49,7 +49,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body
     const userData = await User.findOne({ email })
 
-    const isPasswordCorrect = await bcrypt.compare(password, userData.password)
+    const isPasswordCorrect = await bcrypt.compare(password, userData?.password)
 
     if (!isPasswordCorrect) {
       return res.json({ success: false, message: 'Invalid credentials' })
@@ -86,7 +86,7 @@ export const updateProfile = async (req, res) => {
     else{
       const upload = await cloudinary.uploader.upload(profilePic)
 
-      updatedUser = await User.findByIdAndUpdate(userId, {profilePic: upload.secure_url, bio, fullname}, {new: true})
+      updatedUser = await User.findByIdAndUpdate(userId, {profilePic: upload.secure_url, bio, fullName}, {new: true})
     }
     res.json({success: true, user: updatedUser})
   }
