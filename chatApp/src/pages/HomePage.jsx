@@ -12,7 +12,7 @@ const HomePage = () => {
             `}>
             <SideBar selectedUser={selectedUser} setSelectedUser={setSelectedUser}></SideBar>
             <ChatContainer selectedUser={selectedUser} setSelectedUser={setSelectedUser}></ChatContainer>
-            <RightSideBar selectedUser={selectedUser} setSelectedUser={setSelectedUser}></RightSideBar>
+        <RightSideBar selectedUser={selectedUser} setSelectedUser={setSelectedUser}></RightSideBar>
         </div>
     </div>
   )
