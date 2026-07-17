@@ -6,7 +6,6 @@ import { connectDb } from './lib/db.js'
 import userRouter from './routes/userRoutes.js'
 import messageRouter from './routes/messageRoutes.js'
 import {Server} from 'socket.io'
-import { Socket } from 'dgram'
 
 
 const app = express()
@@ -35,7 +34,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log("user disconnected", userId)
         delete userSocketMap[userId]
-        io.emmit('getOnlineUsers', Object.keys(userSocketMap))
+        io.emit('getOnlineUsers', Object.keys(userSocketMap))
     })
 })
 
@@ -53,12 +52,20 @@ app.use('/api/auth', userRouter)
 
 app.use('/api/messages', messageRouter)
 
-// connect to mongodb
-await connectDb()
-
 const PORT = process.env.PORT || 5000
 
+const startServer = async () => {
+    try {
+        // connect to mongodb
+        await connectDb()
 
-server.listen(PORT, () => {
-    console.log(`server is running on ${PORT}`)
-})
+        server.listen(PORT, () => {
+            console.log(`server is running on ${PORT}`)
+        })
+    } catch (error) {
+        console.log('Failed to start server', error)
+        process.exit(1)
+    }
+}
+
+startServer()

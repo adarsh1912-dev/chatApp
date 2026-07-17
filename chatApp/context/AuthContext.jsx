@@ -7,6 +7,15 @@ import { AuthContext } from './AuthContextObject'
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 const api = axios.create({ baseURL: backendUrl })
 
+// Attach auth token to every request automatically
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.token = token
+  }
+  return config
+})
+
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'))
   const [authUser, setAuthUser] = useState(null)
@@ -103,7 +112,7 @@ export const AuthProvider = ({ children }) => {
     socket,
     login,
     logout,
-    updateProfile
+    updateProfile,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
